@@ -49,21 +49,21 @@
         .right-side-bar.active { right: 0; }
         #side-coin-list { overflow-y: auto; flex: 1; margin-bottom: 10px; }
         .side-coin-item {
-            margin-bottom: 10px; padding: 10px; border: 1px solid var(--border-color); border-radius: 10px;
+            margin-bottom: 6px; padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 10px;
             background: var(--res-bg); cursor: grab; transition: transform 0.1s;
         }
         .side-coin-item:active { cursor: grabbing; transform: scale(0.98); }
-        .side-coin-info { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        .side-coin-info { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
         .side-symbol { font-weight: 800; font-size: 1rem; }
         .side-name { font-size: 0.8rem; opacity: 0.7; }
         
-        .exchange-row, .premium-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 4px; align-items: center; }
+        .exchange-row, .premium-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 3px; align-items: center; }
         .ex-name, .premium-label { color: var(--text-sub); font-weight: 600; width: 75px; font-size: 0.8rem; }
         .ex-price-box, .premium-box { flex: 1; display: flex; justify-content: flex-end; align-items: center; }
         .ex-price, .premium-price { font-weight: 700; color: var(--text-main); font-variant-numeric: tabular-nums; width: 100px; text-align: right; font-size: 0.8rem; }
         .ex-change, .premium-pct { font-size: 0.72rem; font-weight: 600; width: 55px; text-align: right; margin-left: 5px; }
 
-        .premium-row { border-top: 1px dashed var(--border-color); margin-top: 6px; padding-top: 6px; }
+        .premium-row { border-top: 1px dashed var(--border-color); margin-top: 4px; padding-top: 4px; }
 
         .calculator-section { border-top: 2px solid var(--accent-color); padding-top: 10px; margin-top: auto; }
         .calc-toggle-btn { 
@@ -183,9 +183,11 @@
         @media (max-width: 1150px) { body.asset-open { padding-left: 15px; } body.price-open { padding-right: 15px; } }
 
         .asset-coin-item {
-            margin-bottom: 8px; padding: 10px; border: 1px solid var(--border-color); border-radius: 10px;
-            background: var(--res-bg); display: flex; flex-direction: column; gap: 4px; transition: opacity 0.2s;
+            margin-bottom: 6px; padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 10px;
+            background: var(--res-bg); display: flex; flex-direction: column; gap: 4px; transition: opacity 0.2s, transform 0.1s;
+            cursor: grab;
         }
+        .asset-coin-item:active { cursor: grabbing; transform: scale(0.98); }
         .asset-coin-row { display: flex; justify-content: space-between; font-size: 0.8rem; align-items: center; }
         .asset-coin-label { color: var(--text-sub); font-weight: 600; }
         .asset-coin-value { font-weight: 700; color: var(--text-main); text-align: right; }
@@ -195,20 +197,43 @@
 
 <div class="left-side-bar" id="left-asset-bar">
     <h3 style="margin-top: 0; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px;">자산 현황</h3>
-    <div class="asset-charts-container" style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 15px;">
+    <div class="asset-charts-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
         <div>
             <div style="font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; text-align: center;">매수 금액 기준 비중</div>
-            <div style="height: 180px; position: relative;"><canvas id="chart-asset-buy"></canvas></div>
+            <div style="height: 170px; position: relative;"><canvas id="chart-asset-buy"></canvas></div>
         </div>
         <div>
             <div style="font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; text-align: center;">평가 금액 기준 비중</div>
-            <div style="height: 180px; position: relative;"><canvas id="chart-asset-eval"></canvas></div>
+            <div style="height: 170px; position: relative;"><canvas id="chart-asset-eval"></canvas></div>
+        </div>
+        <div>
+            <div style="font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; text-align: center;">현재 자산 현황</div>
+            <div style="height: 170px; position: relative;"><canvas id="chart-asset-loss"></canvas></div>
         </div>
     </div>
     <div id="asset-coin-list" style="overflow-y: auto; flex: 1; padding-right: 2px;"></div>
+</div>
+
+<div class="right-side-bar">
+    <h3 style="margin-top: 0; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px;">거래소 실시간 시세</h3>
+    <div id="side-btc-fixed" style="margin-bottom: 10px;">
+        <div class="side-coin-item" style="cursor: default; margin-bottom: 0; transform: none;">
+            <div class="side-coin-info" style="color: #ffb300; border-color: #ffb30044">
+                <img src="https://static.upbit.com/logos/BTC.png" width="18"> <span class="side-symbol">BTC</span> <span class="side-name">비트코인</span>
+            </div>
+            <div class="exchange-row"><span class="ex-name">Upbit</span><div class="ex-price-box"><span class="ex-price" id="side-upbit-KRW-BTC">-</span><span class="ex-change" id="side-upbit-ch-KRW-BTC"></span></div></div>
+            <div class="exchange-row"><span class="ex-name">Bithumb</span><div class="ex-price-box"><span class="ex-price" id="side-bithumb-KRW-BTC">-</span><span class="ex-change" id="side-bithumb-ch-KRW-BTC"></span></div></div>
+            <div class="exchange-row"><span class="ex-name">Binance</span><div class="ex-price-box" style="flex-direction: column; align-items: flex-end;"><div style="display: flex; align-items: center;"><span class="ex-price" id="side-binance-KRW-BTC">-</span><span class="ex-change" id="side-binance-ch-KRW-BTC"></span></div><span id="side-binance-usd-BTC" style="font-size: 0.65rem; color: var(--text-sub); margin-right: 60px; margin-top: 1px;"></span></div></div>
+            <div class="premium-row"><span class="premium-label">K-Premium</span><div class="premium-box"><span class="premium-price" id="k-prem-val-KRW-BTC">0원</span><span class="premium-pct" id="k-prem-pct-KRW-BTC">0.00%</span></div></div>
+        </div>
+    </div>
+    <div id="side-coin-list"></div>
     
     <div class="calculator-section">
-        <button class="calc-toggle-btn" onclick="toggleCalc()">💧 물타기 계산기 (접기/펴기)</button>
+        <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+            <button class="calc-toggle-btn" style="margin-bottom: 0; flex: 1;" onclick="toggleCalc()">💧 물타기 계산기</button>
+            <button id="calc-apply-btn" class="calc-toggle-btn" style="margin-bottom: 0; background: var(--zero-color); display: none; flex: 1;" onclick="applyWaterCalc()">📊 메인에 적용</button>
+        </div>
         <div id="calc-content" class="calc-content">
             <div class="calc-input-group">
                 <label>코인 선택</label>
@@ -231,15 +256,9 @@
                 <div class="calc-res-row"><span>예상 평단가</span><span id="res-new-avg" class="zero">0원</span></div>
                 <div class="calc-res-row"><span>최종 보유량</span><span id="res-new-qty">0</span></div>
                 <div class="calc-res-row"><span>총 매수금액</span><span id="res-new-total">0원</span></div>
-                <button class="calc-toggle-btn" style="margin-top: 10px; background: var(--zero-color);" onclick="applyWaterCalc()">📊 메인 카드에 적용</button>
             </div>
         </div>
     </div>
-</div>
-
-<div class="right-side-bar">
-    <h3 style="margin-top: 0; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px;">거래소 실시간 시세</h3>
-    <div id="side-coin-list"></div>
 </div>
 
 <div class="header-section">
@@ -324,11 +343,22 @@
         const textColor = theme === 'dark' ? '#ffffff' : '#222222';
         if (assetBuyChart) { assetBuyChart.options.plugins.legend.labels.color = textColor; assetBuyChart.update('none'); }
         if (assetEvalChart) { assetEvalChart.options.plugins.legend.labels.color = textColor; assetEvalChart.update('none'); }
+        if (assetLossChart) { assetLossChart.options.plugins.legend.labels.color = textColor; assetLossChart.update('none'); }
         if (typeof updateAssetData === 'function') updateAssetData();
     }
 
     function toggleMenu() { document.getElementById('manage-menu').classList.toggle('active'); }
-    function toggleCalc() { document.getElementById('calc-content').classList.toggle('active'); }
+    
+    function toggleCalc() { 
+        const content = document.getElementById('calc-content');
+        const applyBtn = document.getElementById('calc-apply-btn');
+        content.classList.toggle('active'); 
+        if (content.classList.contains('active')) {
+            applyBtn.style.display = 'block';
+        } else {
+            applyBtn.style.display = 'none';
+        }
+    }
 
     function togglePriceMenu() {
         const rightBar = document.querySelector('.right-side-bar');
@@ -442,7 +472,29 @@
     function saveData(id) { localStorage.setItem(`target-${id}`, document.getElementById(`input-${id}`).value); localStorage.setItem(`qty-${id}`, document.getElementById(`qty-${id}`).value); updateSummary(); runWaterCalc(); }
 
     async function updateData() {
-        try { const btcRes = await fetch(`https://api.upbit.com/v1/ticker?markets=KRW-BTC`), btcData = await btcRes.json(); document.getElementById('btc-price').innerText = btcData[0].trade_price.toLocaleString() + "원"; } catch (e) {}
+        try { 
+            const btcRes = await fetch(`https://api.upbit.com/v1/ticker?markets=KRW-BTC`), btcData = await btcRes.json(), curBTC = btcData[0].trade_price; 
+            document.getElementById('btc-price').innerText = curBTC.toLocaleString() + "원"; 
+            
+            const upChRateRawBTC = btcData[0].signed_change_rate * 100, infoUpBTC = getValInfo(upChRateRawBTC, true);
+            document.getElementById(`side-upbit-KRW-BTC`).innerText = curBTC.toLocaleString() + "원";
+            const upSideElBTC = document.getElementById(`side-upbit-ch-KRW-BTC`); upSideElBTC.innerText = infoUpBTC.txt; upSideElBTC.className = `ex-change ${infoUpBTC.cls}`;
+
+            const btmResBTC = await fetch(`https://api.bithumb.com/public/ticker/BTC_KRW`), btmDataBTC = await btmResBTC.json(), btmPBTC = parseFloat(btmDataBTC.data.closing_price), btmChBTC = parseFloat(btmDataBTC.data.fluctate_rate_24H), infoBtmBTC = getValInfo(btmChBTC, true);
+            document.getElementById(`side-bithumb-KRW-BTC`).innerText = btmPBTC.toLocaleString() + "원";
+            const btmSideElBTC = document.getElementById(`side-bithumb-ch-KRW-BTC`); btmSideElBTC.innerText = infoBtmBTC.txt; btmSideElBTC.className = `ex-change ${infoBtmBTC.cls}`;
+
+            const binResBTC = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`), binDataBTC = await binResBTC.json(), binUSDPriceBTC = parseFloat(binDataBTC.lastPrice), binPKRWBTC = binUSDPriceBTC * exchangeRate, binChBTC = parseFloat(binDataBTC.priceChangePercent), infoBinBTC = getValInfo(binChBTC, true);
+            document.getElementById(`side-binance-KRW-BTC`).innerText = Math.round(binPKRWBTC).toLocaleString() + "원";
+            document.getElementById(`side-binance-usd-BTC`).innerText = "($" + binUSDPriceBTC.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ")";
+            const binSideElBTC = document.getElementById(`side-binance-ch-KRW-BTC`); binSideElBTC.innerText = infoBinBTC.txt; binSideElBTC.className = `ex-change ${infoBinBTC.cls}`;
+
+            const kDiffBTC = curBTC - binPKRWBTC, kPctBTC = (kDiffBTC / binPKRWBTC * 100), infoKPctBTC = getValInfo(kPctBTC, true), kValElBTC = document.getElementById(`k-prem-val-KRW-BTC`), kPctElBTC = document.getElementById(`k-prem-pct-KRW-BTC`);
+            kValElBTC.innerText = (kDiffBTC > 0 ? '+' : '') + Math.round(kDiffBTC).toLocaleString() + "원";
+            kValElBTC.className = `premium-price ${kDiffBTC > 0 ? 'plus' : (kDiffBTC < 0 ? 'minus' : 'zero')}`;
+            kPctElBTC.innerText = infoKPctBTC.txt; kPctElBTC.className = `premium-pct ${infoKPctBTC.cls}`;
+        } catch (e) {}
+
         for (const id of ALL_IDS) {
             try {
                 const sym = id.split('-')[1], pRes = await fetch(`https://api.upbit.com/v1/ticker?markets=${id}`), pData = await pRes.json(), cur = pData[0].trade_price; prices[id] = cur;
@@ -505,7 +557,7 @@
         Chart.unregister(ChartDataLabels);
     }
     
-    let assetBuyChart = null, assetEvalChart = null;
+    let assetBuyChart = null, assetEvalChart = null, assetLossChart = null;
 
     function toggleAssetMenu() {
         const leftBar = document.getElementById('left-asset-bar');
@@ -535,9 +587,19 @@
 
     function renderAssetList() {
         const listContainer = document.getElementById('asset-coin-list');
-        listContainer.innerHTML = '';
         
         if (!assetEvalChart || !window.currentAssetCoinData) return;
+
+        if (!listContainer.hasAttribute('data-sortable')) {
+            new Sortable(listContainer, {
+                animation: 150,
+                onEnd: () => {
+                    const order = Array.from(listContainer.children).map(c => c.getAttribute('data-id'));
+                    localStorage.setItem('asset-side-order', JSON.stringify(order));
+                }
+            });
+            listContainer.setAttribute('data-sortable', 'true');
+        }
 
         let visibleTotalEval = 0;
         window.currentAssetCoinData.forEach((item, index) => {
@@ -546,13 +608,43 @@
             }
         });
 
-        window.currentAssetCoinData.forEach((item, index) => {
-            const isVisible = assetEvalChart.getDataVisibility(index);
+        const isDragging = listContainer.querySelector('.sortable-drag') || listContainer.querySelector('.sortable-ghost');
+
+        let savedOrder = JSON.parse(localStorage.getItem('asset-side-order')) || [];
+        let orderMap = {};
+        savedOrder.forEach((id, i) => orderMap[id] = i);
+
+        let dataToRender = [...window.currentAssetCoinData];
+        dataToRender.sort((a, b) => {
+            let idxA = orderMap[a.id] !== undefined ? orderMap[a.id] : 999;
+            let idxB = orderMap[b.id] !== undefined ? orderMap[b.id] : 999;
+            return idxA - idxB;
+        });
+
+        const activeIds = dataToRender.map(d => d.id);
+        Array.from(listContainer.children).forEach(child => {
+            if (!activeIds.includes(child.getAttribute('data-id'))) {
+                child.remove();
+            }
+        });
+
+        dataToRender.forEach((item) => {
+            const origIndex = window.currentAssetCoinData.findIndex(d => d.id === item.id);
+            const isVisible = assetEvalChart.getDataVisibility(origIndex);
             const ePct = (isVisible && visibleTotalEval > 0) ? ((item.evalT / visibleTotalEval) * 100).toFixed(2) : '0.00';
             const itemColor = (item.id === "KRW-XLM" && window.currentIsDark) ? "#d3d3d3" : (item.id === "KRW-XLM" ? "#4d4d4d" : item.color);
             
-            const div = document.createElement('div');
-            div.className = 'asset-coin-item';
+            let div = document.getElementById(`asset-item-${item.id}`);
+            if (!div) {
+                div = document.createElement('div');
+                div.className = 'asset-coin-item';
+                div.id = `asset-item-${item.id}`;
+                div.setAttribute('data-id', item.id);
+                if (!isDragging) listContainer.appendChild(div);
+            } else {
+                if (!isDragging) listContainer.appendChild(div);
+            }
+
             div.style.borderColor = itemColor + '44';
             div.style.opacity = isVisible ? '1' : '0.4'; 
             
@@ -563,12 +655,10 @@
                         <span style="font-weight: 800; color: ${itemColor}; white-space: nowrap; font-size: 0.9rem;">${item.symbol} <span style="font-size: 0.75rem; opacity: 0.7;">(${item.name})</span></span>
                     </div>
                     <div style="display: flex; align-items: center; justify-content: flex-end; flex: 1;">
-                        <span style="color: var(--text-sub); font-size: 0.75rem; font-weight: 600; margin-right: 8px;"></span>
                         <span class="asset-coin-value" style="font-weight: 800; color: ${itemColor}; width: 65px; text-align: right; font-variant-numeric: tabular-nums; display: inline-block;">${ePct}%</span>
                     </div>
                 </div>
             `;
-            listContainer.appendChild(div);
         });
     }
 
@@ -617,11 +707,10 @@
         });
 
         const textColor = isDark ? '#ffffff' : '#222222';
-        
         window.currentAssetCoinData = coinDataList;
         window.currentIsDark = isDark;
 
-        
+        // 1. 매수 금액 기준 차트
         if (!assetBuyChart) {
             const ctxBuy = document.getElementById('chart-asset-buy').getContext('2d');
             assetBuyChart = new Chart(ctxBuy, {
@@ -635,25 +724,23 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { 
-                        legend: { position: 'right', labels: { color: textColor, font: { size: 10 } }, onClick: customLegendClick },
+                        legend: { position: 'right', labels: { color: textColor, font: { size: 10 }, boxWidth: 20 }, onClick: customLegendClick },
                         tooltip: customTooltip,
                         datalabels: {
                             color: '#ffffff',
                             font: { weight: 'bold', size: 10 },
-                            
                             formatter: (value, ctx) => {
                                 let sum = 0;
                                 ctx.dataset.data.forEach((val, idx) => {
                                     if (ctx.chart.getDataVisibility(idx)) sum += val;
                                 });
-                                return (sum > 0 && ctx.chart.getDataVisibility(ctx.dataIndex)) ? ((value / sum) * 100).toFixed(1) : '';
+                                return (sum > 0 && ctx.chart.getDataVisibility(ctx.dataIndex)) ? ((value / sum) * 100).toFixed(1) + '%' : '';
                             }
                         }
                     }
                 }
             });
         } else {
-            
             const prevVisibility = {};
             for (let i = 0; i < assetBuyChart.data.labels.length; i++) {
                 prevVisibility[assetBuyChart.data.labels[i]] = assetBuyChart.getDataVisibility(i);
@@ -673,7 +760,7 @@
             assetBuyChart.update('none');
         }
 
-        
+        // 2. 평가 금액 기준 차트
         if (!assetEvalChart) {
             const ctxEval = document.getElementById('chart-asset-eval').getContext('2d');
             assetEvalChart = new Chart(ctxEval, {
@@ -687,25 +774,23 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { 
-                        legend: { position: 'right', labels: { color: textColor, font: { size: 10 } }, onClick: customLegendClick },
+                        legend: { position: 'right', labels: { color: textColor, font: { size: 10 }, boxWidth: 20 }, onClick: customLegendClick },
                         tooltip: customTooltip,
                         datalabels: {
                             color: '#ffffff',
                             font: { weight: 'bold', size: 10 },
-                            
                             formatter: (value, ctx) => {
                                 let sum = 0;
                                 ctx.dataset.data.forEach((val, idx) => {
                                     if (ctx.chart.getDataVisibility(idx)) sum += val;
                                 });
-                                return (sum > 0 && ctx.chart.getDataVisibility(ctx.dataIndex)) ? ((value / sum) * 100).toFixed(1) : '';
+                                return (sum > 0 && ctx.chart.getDataVisibility(ctx.dataIndex)) ? ((value / sum) * 100).toFixed(1) + '%' : '';
                             }
                         }
                     }
                 }
             });
         } else {
-            
             const prevVisibility = {};
             for (let i = 0; i < assetEvalChart.data.labels.length; i++) {
                 prevVisibility[assetEvalChart.data.labels[i]] = assetEvalChart.getDataVisibility(i);
@@ -723,6 +808,67 @@
                 }
             });
             assetEvalChart.update('none');
+        }
+
+        // 3. 총 매수금 대비 현황 (손실 포함) 차트
+        let lossLabels = [...labels];
+        let lossAmounts = [...evalAmounts];
+        let lossColors = [...colors];
+        let currentLoss = totalBuy - totalEval;
+        
+        if (currentLoss > 0) {
+            lossLabels.push('LOSS');
+            lossAmounts.push(currentLoss);
+            lossColors.push('#ff5252'); // 붉은색
+        }
+
+        if (!assetLossChart) {
+            const ctxLoss = document.getElementById('chart-asset-loss').getContext('2d');
+            assetLossChart = new Chart(ctxLoss, {
+                type: 'pie',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: lossLabels,
+                    datasets: [{ data: lossAmounts, backgroundColor: lossColors, borderWidth: 1 }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'right', labels: { color: textColor, font: { size: 10 }, boxWidth: 20 }, onClick: customLegendClick },
+                        tooltip: customTooltip,
+                        datalabels: {
+                            color: '#ffffff',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: (value, ctx) => {
+                                let sum = 0;
+                                ctx.dataset.data.forEach((val, idx) => {
+                                    if (ctx.chart.getDataVisibility(idx)) sum += val;
+                                });
+                                return (sum > 0 && ctx.chart.getDataVisibility(ctx.dataIndex)) ? ((value / sum) * 100).toFixed(1) + '%' : '';
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            const prevVisibility = {};
+            for (let i = 0; i < assetLossChart.data.labels.length; i++) {
+                prevVisibility[assetLossChart.data.labels[i]] = assetLossChart.getDataVisibility(i);
+            }
+            
+            assetLossChart.data.labels = lossLabels;
+            assetLossChart.data.datasets[0].data = lossAmounts;
+            assetLossChart.data.datasets[0].backgroundColor = lossColors;
+            assetLossChart.options.plugins.legend.labels.color = textColor;
+            
+            lossLabels.forEach((lbl, i) => {
+                const shouldBeVisible = prevVisibility[lbl] !== undefined ? prevVisibility[lbl] : true;
+                if (assetLossChart.getDataVisibility(i) !== shouldBeVisible) {
+                    assetLossChart.toggleDataVisibility(i);
+                }
+            });
+            assetLossChart.update('none');
         }
 
         renderAssetList();
